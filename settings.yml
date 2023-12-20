@@ -1,0 +1,7 @@
+tool_status:
+  type: string
+  default: ""
+
+shutter_tick_enable:
+  type: bool
+  default: true

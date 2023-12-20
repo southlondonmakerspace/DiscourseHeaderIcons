@@ -1,0 +1,40 @@
+<script type="text/discourse-plugin" version="0.8">
+    const { iconNode } = require("discourse-common/lib/icon-library");
+    api.decorateWidget('header-icons:before', helper => {
+        return helper.h('li.header-dropdown-toggle', [
+            helper.h('a.icon', {
+                href:'https://discourse.southlondonmakerspace.org/calendar',
+                title: 'SLMS Calendar'
+            }, iconNode("calendar-alt")),
+        ]);
+    });
+    if (Object.values(api.getCurrentUser().groups).findIndex(o => o.name === 'members') !== -1)
+    {
+        api.decorateWidget('header-icons:before', (helper) => {
+            //https://fontawesome.com/v5.15/icons?d=gallery&p=2&q=times&s=regular,solid&m=free
+            let icon = 'question';
+            let title = 'Open status: unknown';
+            try {
+                const cache = JSON.parse(settings.tool_status);
+                const shutter = cache.tools[4];
+                if (shutter.status)
+                {
+                    icon = 'check';
+                    title = 'Open since '+shutter.date;
+                }
+                else
+                {
+                    icon = 'times';
+                    title = 'Closed since '+shutter.date;
+                }
+            } catch (e) {}
+            return helper.h('li.header-dropdown-toggle', [
+                helper.h('a.icon', {
+                    href:'https://discourse.southlondonmakerspace.org/calendar',
+                    title: title
+                }, iconNode(icon)),
+            ]);
+        });
+    }
+    
+    </script>
