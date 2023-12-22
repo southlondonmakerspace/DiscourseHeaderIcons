@@ -1,3 +1,21 @@
+body:not(.group-members) .doc-header-set {
+    display: none;
+    visibility: hidden;
+}
+
+.d-header-icons .icon.doc {
+    width: auto;
+    gap: 0.5em;
+    margin-inline: 1em;
+    //font-size: 1.5em;
+    color: grey;
+    
+    
+    & .d-icon {
+        width: 1em;
+    }
+}
+
 .d-header-icons .d-icon-check {
     color: green;
 }
