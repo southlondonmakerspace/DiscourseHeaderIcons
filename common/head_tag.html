@@ -1,6 +1,17 @@
 <script type="text/discourse-plugin" version="0.8">
     const { iconNode } = require("discourse-common/lib/icon-library");
     api.decorateWidget('header-icons:before', helper => {
+        return helper.h('div.d-header-icons.doc-header-set', [
+            helper.h('a.icon.btn-flat.doc', {
+                href:'/docs',
+                title: 'Documents'
+            }, [iconNode("book"), "Documents"]),
+        ]);
+    });
+
+
+    
+    api.decorateWidget('header-icons:before', helper => {
         return helper.h('li.header-dropdown-toggle', [
             helper.h('a.icon', {
                 href:'/calendar',
