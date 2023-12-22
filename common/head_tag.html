@@ -3,7 +3,7 @@
     api.decorateWidget('header-icons:before', helper => {
         return helper.h('li.header-dropdown-toggle', [
             helper.h('a.icon', {
-                href:'https://discourse.southlondonmakerspace.org/calendar',
+                href:'/calendar',
                 title: 'SLMS Calendar'
             }, iconNode("calendar-alt")),
         ]);
@@ -30,7 +30,7 @@
             } catch (e) {}
             return helper.h('li.header-dropdown-toggle', [
                 helper.h('a.icon', {
-                    href:'https://discourse.southlondonmakerspace.org/calendar',
+                    href:'/calendar',
                     title: title
                 }, iconNode(icon)),
             ]);
