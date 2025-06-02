@@ -3,7 +3,7 @@ import dIcon from "discourse-common/helpers/d-icon";
 
 export default apiInitializer("1.34.0", (api) => {
   // Dynamic logic to determine icon and title
-  let icon = "calendar";
+  let icon = "users";
   let title = "Open status: unknown";
 
   try {
