@@ -3,7 +3,7 @@ import dIcon from "discourse-common/helpers/d-icon";
 
 export default apiInitializer("1.34.0", (api) => {
   // Dynamic logic to determine icon and title
-  let icon = "users";
+  let icon = "calendar-days";
   let title = "Open status: unknown";
 
   try {
@@ -11,7 +11,7 @@ export default apiInitializer("1.34.0", (api) => {
     const shutter = cache.tools[4];
 
     if (shutter.status) {
-      icon = "calendar-check";
+      icon = "calendar-check"; //FIXME no longer available, see request to /svg-sprite/*
       title = "Open since " + shutter.date;
     } else {
       icon = "calendar-days";
