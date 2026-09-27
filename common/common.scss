@@ -1,6 +1,33 @@
-.d-header-icons .d-icon-check {
+body:not(.group-members) .shutter-status {
+    display: none;
+    visibility: hidden;
+}
+.d-header-icons .d-icon-calendar-check {
     color: green;
 }
-.d-header-icons .d-icon-times {
+.d-header-icons .d-icon- {
     color: red;
 }
+
+.d-header-icons .icon.doc {
+    width: auto;
+    gap: 0.5em;
+    margin-inline: 1em;
+    //font-size: 1.5em;
+    color: grey;
+    
+    
+    & .d-icon {
+        width: 1em;
+    }
+}
+.icons.d-header-icons > li > a {
+    margin-right: 1em; /* Add spacing between the links */
+}
+
+/* Remove margin for the last link */
+.icons.d-header-icons > li > a:last-child {
+    margin-right: 0;
+}
+
+
