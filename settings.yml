@@ -1,7 +1,21 @@
-tool_status:
-  type: string
-  default: ""
-
 shutter_tick_enable:
   type: bool
   default: true
+  description: "Show on the calendar icon whether the space is open."
+
+shutter_status_url:
+  type: string
+  default: "https://southlondonmakerspace.org/wp-json/slms/v1/shutter"
+  description: "Where to read the shutter status from."
+
+shutter_refresh_minutes:
+  type: integer
+  default: 5
+  min: 1
+  description: "How often an open page checks the status again."
+
+svg_icons:
+  type: list
+  list_type: compact
+  default: "calendar-check"
+  description: "Icons this component uses that Discourse doesn't include by default."
