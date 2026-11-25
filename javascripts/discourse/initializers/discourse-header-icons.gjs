@@ -1,28 +1,71 @@
+import { tracked } from "@glimmer/tracking";
 import { apiInitializer } from "discourse/lib/api";
 import dIcon from "discourse/helpers/d-icon";
 
-export default apiInitializer("1.34.0", (api) => {
-  // Dynamic logic to determine icon and title
-  let icon = "calendar-days";
-  let title = "Open status: unknown";
+// Whether the space is open, read from the shutter status on the WordPress site:
+// {"status": "open" | "closed" | "unknown", "since": ISO 8601 or null}
+class Shutter {
+  @tracked open = null; // true, false, or null when not known
+  @tracked since = null;
 
-  try {
-    const cache = JSON.parse(settings.tool_status);
-    const shutter = cache.tools[4];
-
-    if (shutter.status) {
-      icon = "calendar-check"; //FIXME no longer available, see request to /svg-sprite/*
-      title = "Open since " + shutter.date;
-    } else {
-      icon = "calendar-days";
-      title = "Closed since " + shutter.date;
-    }
-  } catch (e) {
-    console.error("Error parsing tool_status settings:", e);
+  get icon() {
+    return this.open ? "calendar-check" : "calendar-days";
   }
 
+  get title() {
+    if (!settings.shutter_tick_enable) {
+      return "Calendar";
+    }
+    if (this.open === null) {
+      return "Open status: unknown";
+    }
+    const when = this.since
+      ? new Date(this.since).toLocaleString([], {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "";
+    return (this.open ? "Open" : "Closed") + (when ? ` since ${when}` : "");
+  }
 
-  // Add header icons
+  async refresh() {
+    if (document.hidden) {
+      return; // no need to check while the tab isn't being looked at
+    }
+    try {
+      const res = await fetch(settings.shutter_status_url, {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      this.open =
+        data.status === "open" ? true : data.status === "closed" ? false : null;
+      this.since = this.open === null ? null : data.since || null;
+    } catch (e) {
+      this.open = null;
+      this.since = null;
+      // eslint-disable-next-line no-console
+      console.warn("Shutter status:", e);
+    }
+  }
+}
+
+export default apiInitializer("1.34.0", (api) => {
+  const shutter = new Shutter();
+
+  if (settings.shutter_tick_enable && settings.shutter_status_url) {
+    shutter.refresh();
+    setInterval(
+      () => shutter.refresh(),
+      settings.shutter_refresh_minutes * 60 * 1000
+    );
+    document.addEventListener("visibilitychange", () => shutter.refresh());
+  }
+
   api.headerIcons.add(
     "discourse-header-icons",
     <template>
@@ -31,9 +74,9 @@ export default apiInitializer("1.34.0", (api) => {
           id="calendar-link"
           class="icon"
           href="/calendar"
-          title={{title}}
+          title={{shutter.title}}
         >
-          {{dIcon icon}}
+          {{dIcon shutter.icon}}
         </a>
       </li>
     </template>,
